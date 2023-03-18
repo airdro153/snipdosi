@@ -68,7 +68,6 @@ class dataBuy {
             }
 
         }
-        console.log('stoped')
     }
 
     async session() {
@@ -208,124 +207,27 @@ class dataBuy {
     }
 
     async stop() {
-        const response = await axios.delete(`https://wallet.dosi.world/api/v1/payments/crypto/${this.sessionKey}`, {
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Connection': 'keep-alive',
-            'Cookie': this.cookie,
-            'Origin': 'https://wallet.dosi.world',
-            'Referer': 'https://wallet.dosi.world/purchase/crypto/33c53fb4-b54c-472f-b756-a0e67e9d1aaa',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-origin',
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 12; ASUS_I005D) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36',
-            'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"',
-            'sec-ch-ua-mobile': '?1',
-            'sec-ch-ua-platform': '"Android"'
-        }
-        });
-        return response.data.responseData.status
-    }
-
-
-}
-
-class cat {
-    constructor(id,cookie) {
-        this.id = id
-        this.cookie = cookie
-    }
-
-    async sessionCat() {
         try {
-            const res = await axios.post(
-                `https://citizen.store.dosi.world/api/stores/v2/payment/drops/${this.id}`,
-                {
-                  'currency': 'USD',
-                  'currencyCodeExchangedTo': 'LN',
-                  'callbackUrl': {
-                    'onApprovedUrl': 'https://citizen.store.dosi.world/en-US/purchase/approvePurchase',
-                    'cancelUrl': 'https://citizen.store.dosi.world/purchase/cancelPurchase'
-                  }
-                },
-                {
-                  headers: {
-                    'authority': 'citizen.store.dosi.world',
-                    'accept': 'application/json',
-                    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-                    'content-type': 'application/json',
-                    'cookie': this.cookie,
-                    'origin': 'https://citizen.store.dosi.world',
-                    'referer': 'https://citizen.store.dosi.world/en-US/1st_sale/sales/3800',
-                    'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-                    'sec-ch-ua-mobile': '?0',
-                    'sec-ch-ua-platform': '"Windows"',
-                    'sec-fetch-dest': 'empty',
-                    'sec-fetch-mode': 'cors',
-                    'sec-fetch-site': 'same-origin',
-                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-                  }
-                }
-            );
-            if (res.data.responseData.paymentId) {
-                const response = await axios.post(
-                    `https://wallet.dosi.world/api/v1/payments/crypto/${res.data.responseData.paymentId}/session`,
-                    {
-                      'currentIpCountryCodeAlpha2': 'ID'
-                    },
-                    {
-                      headers: {
-                        'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-                        'Connection': 'keep-alive',
-                        'Cookie': this.cookie,
-                        'Origin': 'https://wallet.dosi.world',
-                        'Referer': 'https://wallet.dosi.world/purchase/crypto-ln/12a86b21-252e-43d0-9f3d-6c3dbf59e5be',
-                        'Sec-Fetch-Dest': 'empty',
-                        'Sec-Fetch-Mode': 'cors',
-                        'Sec-Fetch-Site': 'same-origin',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
-                        'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-                        'sec-ch-ua-mobile': '?0',
-                        'sec-ch-ua-platform': '"Windows"',
-                        'sentry-trace': '240b7ebf6fe646e8a683f48e8872f946-8eac78df4f4b60a3-0'
-                      }
-                    }
-                );
-                return response.data.responseData.sessionKey
+            const response = await axios.delete(`https://wallet.dosi.world/api/v1/payments/crypto/${this.sessionKey}`, {
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Connection': 'keep-alive',
+                'Cookie': this.cookie,
+                'Origin': 'https://wallet.dosi.world',
+                'Referer': 'https://wallet.dosi.world/purchase/crypto/33c53fb4-b54c-472f-b756-a0e67e9d1aaa',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 12; ASUS_I005D) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36',
+                'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"',
+                'sec-ch-ua-mobile': '?1',
+                'sec-ch-ua-platform': '"Android"'
             }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    async startCat(sessionKey) {
-        try {
-            const response = await axios.post(
-                `https://wallet.dosi.world/api/v1/payments/crypto/${sessionKey}/start`,
-                {
-                  'buyerCryptoWalletAddress': 'link180sayalxm8rg9kgztef9guhh0d4annkj8m92nx',
-                  'billingAddress': 'ID',
-                  'currentBlockNumber': 53968263
-                },
-                {
-                  headers: {
-                    'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-                    'Connection': 'keep-alive',
-                    'Cookie': this.cookie,
-                    'Origin': 'https://wallet.dosi.world',
-                    'Referer': 'https://wallet.dosi.world/purchase/crypto-ln/12a86b21-252e-43d0-9f3d-6c3dbf59e5be',
-                    'Sec-Fetch-Dest': 'empty',
-                    'Sec-Fetch-Mode': 'cors',
-                    'Sec-Fetch-Site': 'same-origin',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
-                    'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-                    'sec-ch-ua-mobile': '?0',
-                    'sec-ch-ua-platform': '"Windows"'
-                  }
-                }
-            );
-        } catch (error) {
-            console.log(error);
+            });
+            return response.data.responseData.status
+        } catch (e) {
+            return
         }
     }
 }
@@ -361,13 +263,13 @@ class dataBot {
         bot.sendMessage(this.chatId, 'Masukan Tipe',{
             reply_markup: {
                 resize_keyboard: true,
-                keyboard: [[{ text: 'ETH' }], [{ text: 'LN' }]],
+                keyboard: [[{ text: 'ETH' },{ text: 'LN' }],[{ text: 'HOME'}]],
             }
         });
     }
 
-    async priceuser() {
-        bot.sendMessage(this.chatId, 'Masukan Harga ETH',{
+    async priceuser(currency) {
+        bot.sendMessage(this.chatId, `Masukan Harga ${currency}`,{
             reply_markup: {
                 resize_keyboard: true,
                 keyboard: [['BACK']],
@@ -382,17 +284,6 @@ class dataBot {
             reply_markup: {
                 resize_keyboard: true,
                 keyboard: [['BACK']],
-            }
-        });
-        await this.botone()
-        return this.messange
-    }
-
-    async address() {
-        bot.sendMessage(this.chatId, 'Masukan Address ETH',{
-            reply_markup: {
-                resize_keyboard: true,
-                keyboard: [['CANCEL']],
             }
         });
         await this.botone()
@@ -444,7 +335,7 @@ bot.on('message', async (msg) => {
     if (message == 'ETH') {
         async function beli() {
             buy.stopflag = false
-            const price = await methode.priceuser()
+            const price = await methode.priceuser('ETH')
             if (isNaN(price)) {
                 if (price == 'BACK') {
                     methode.beli()
@@ -465,7 +356,36 @@ bot.on('message', async (msg) => {
             buy.propertyIds = ''
             buy.currency = 'ETH'
             buy.address = '0x1e1af2aaf5EbBD5F57B47a187122A626FcE4eC16'
-            refrash(chatid) 
+            return refrash(chatid)
+        }
+        beli()
+        return
+    }
+    if (message == 'LN') {
+        async function beli() {
+            buy.stopflag = false
+            const price = await methode.priceuser('LN')
+            if (isNaN(price)) {
+                if (price == 'BACK') {
+                    methode.beli()
+                    return
+                } else {
+                    bot.sendMessage(chatid, 'Harga harus angka')
+                    methode.beli()
+                    return
+                }
+            }
+            const cookie = await methode.cookie()
+            if (cookie == 'BACK') {
+                methode.beli()
+                return
+            }
+            buy.priceto = price
+            buy.cookie = cookie
+            buy.propertyIds = ''
+            buy.currency = 'LN'
+            buy.address = 'link180sayalxm8rg9kgztef9guhh0d4annkj8m92nx'
+            return refrash(chatid)
         }
         beli()
         return
@@ -490,10 +410,13 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatid, 'STOPED',{
             reply_markup: {
                 resize_keyboard: true,
-                keyboard: [[{ text: 'ETH' }], [{ text: 'LN' }]]
+                keyboard: [[{ text: 'ETH' },{ text: 'LN' }],[{ text: 'HOME'}]],
             }
         })
     }
-
+    if (message == 'HOME') {
+        methode.home()
+    }
 
 });
+
