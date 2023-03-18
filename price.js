@@ -304,7 +304,7 @@ async function refrash(chatid) {
     bot.sendMessage(chatid, 'Wait....',{
         reply_markup: {
             resize_keyboard: true,
-            keyboard: [[{ text: 'STOP'}]],
+            keyboard: [[{ text: 'REFRASH'}], [{ text: 'STOP'}]],
         }
     })
     const start = await buy.start()
