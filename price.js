@@ -301,7 +301,12 @@ bot.onText(/\/start/, async (msg) => {
 });
 
 async function refrash(chatid) {
-    bot.sendMessage(chatid, 'Wait....')
+    bot.sendMessage(chatid, 'Wait....',{
+        reply_markup: {
+            resize_keyboard: true,
+            keyboard: [[{ text: 'STOP'}]],
+        }
+    })
     const start = await buy.start()
     if (start == 'STARTED') {
         bot.sendMessage(chatid, `STARTED https://citizen.store.dosi.world/en-US/nfts/${buy.idmarket}`,{
