@@ -420,7 +420,12 @@ async function refrash(chatid) {
             }
         })
     } else if (start == 'locked') {
-        bot.sendMessage(chatid, 'wallet ke kunci')
+        bot.sendMessage(chatid, 'wallet ke kunci',{
+            reply_markup: {
+                resize_keyboard: true,
+                keyboard: [[{ text: 'REFRASH'}], [{ text: 'STOP'}]],
+            }
+        })
     } else {
         bot.sendMessage(chatid, 'NFT Dalam proses pembayaran')
     }
@@ -476,7 +481,7 @@ bot.on('message', async (msg) => {
         return
     }
     if (message == 'REFRASH') {
-        buy,stop()
+        buy.stop()
         refrash(chatid)
         return
     }
