@@ -6,7 +6,6 @@ function sleep(ms) {
 }
 
 
-
 class dataBuy {
     constructor() {
         this.priceto = null;
@@ -19,6 +18,7 @@ class dataBuy {
         this.idmarket = null;
         this.sessionKey = null;
         this.stopflag = null;
+        this.id = null;
 
     }
 
@@ -230,6 +230,109 @@ class dataBuy {
             return
         }
     }
+
+    async sessionCat() {
+        while (!this.stopflag) {
+            try {
+                const res = await axios.post(
+                    `https://citizen.store.dosi.world/api/stores/v2/payment/drops/${this.id}`,
+                    {
+                      'currency': 'USD',
+                      'currencyCodeExchangedTo': 'LN',
+                      'callbackUrl': {
+                        'onApprovedUrl': 'https://citizen.store.dosi.world/en-US/purchase/approvePurchase',
+                        'cancelUrl': 'https://citizen.store.dosi.world/purchase/cancelPurchase'
+                      }
+                    },
+                    {
+                      headers: {
+                        'authority': 'citizen.store.dosi.world',
+                        'accept': 'application/json',
+                        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+                        'content-type': 'application/json',
+                        'cookie': this.cookie,
+                        'origin': 'https://citizen.store.dosi.world',
+                        'referer': 'https://citizen.store.dosi.world/en-US/1st_sale/sales/3800',
+                        'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-platform': '"Windows"',
+                        'sec-fetch-dest': 'empty',
+                        'sec-fetch-mode': 'cors',
+                        'sec-fetch-site': 'same-origin',
+                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+                      }
+                    }
+                );
+                if (res.data.responseData.paymentId) {
+                    const response = await axios.post(
+                        `https://wallet.dosi.world/api/v1/payments/crypto/${res.data.responseData.paymentId}/session`,
+                        {
+                          'currentIpCountryCodeAlpha2': 'ID'
+                        },
+                        {
+                          headers: {
+                            'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+                            'Connection': 'keep-alive',
+                            'Cookie': this.cookie,
+                            'Origin': 'https://wallet.dosi.world',
+                            'Referer': 'https://wallet.dosi.world/purchase/crypto-ln/12a86b21-252e-43d0-9f3d-6c3dbf59e5be',
+                            'Sec-Fetch-Dest': 'empty',
+                            'Sec-Fetch-Mode': 'cors',
+                            'Sec-Fetch-Site': 'same-origin',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+                            'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+                            'sec-ch-ua-mobile': '?0',
+                            'sec-ch-ua-platform': '"Windows"',
+                            'sentry-trace': '240b7ebf6fe646e8a683f48e8872f946-8eac78df4f4b60a3-0'
+                          }
+                        }
+                    );
+                    this.sessionKey = response.data.responseData.sessionKey
+                    console.log(response.data.responseData.sessionKey)
+                    return response.data.responseData.sessionKey
+                }
+            } catch (error) {
+                continue
+            }
+        }
+    }
+
+    async startCat() {
+        const value =await this.sessionCat()
+        if (this.stopflag) {
+            return null
+        } else {
+            try {
+                const response = await axios.post(
+                    `https://wallet.dosi.world/api/v1/payments/crypto/${this.sessionKey}/start`,
+                    {
+                        'buyerCryptoWalletAddress': 'link180sayalxm8rg9kgztef9guhh0d4annkj8m92nx',
+                        'billingAddress': 'ID',
+                        'currentBlockNumber': 53968263
+                    },
+                    {
+                        headers: {
+                        'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+                        'Connection': 'keep-alive',
+                        'Cookie': this.cookie,
+                        'Origin': 'https://wallet.dosi.world',
+                        'Referer': 'https://wallet.dosi.world/purchase/crypto-ln/12a86b21-252e-43d0-9f3d-6c3dbf59e5be',
+                        'Sec-Fetch-Dest': 'empty',
+                        'Sec-Fetch-Mode': 'cors',
+                        'Sec-Fetch-Site': 'same-origin',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+                        'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-platform': '"Windows"'
+                        }
+                    }
+                );
+                return response.data
+            } catch (error) {
+                return this.startCat()
+            }
+        }
+    }
 }
 
 class dataBot {
@@ -263,11 +366,21 @@ class dataBot {
         bot.sendMessage(this.chatId, 'Masukan Tipe',{
             reply_markup: {
                 resize_keyboard: true,
+                keyboard: [[{ text: 'CITIZEN' },{ text: 'CAT' }],[{ text: 'HOME'}]],
+            }
+        });
+    }
+
+    belilevel1() {
+        bot.sendMessage(this.chatId, 'Masukan Tipe',{
+            reply_markup: {
+                resize_keyboard: true,
                 keyboard: [[{ text: 'ETH' },{ text: 'LN' }],[{ text: 'HOME'}]],
             }
         });
     }
 
+    
     async priceuser(currency) {
         bot.sendMessage(this.chatId, `Masukan Harga ${currency}`,{
             reply_markup: {
@@ -286,6 +399,17 @@ class dataBot {
                 keyboard: [['BACK']],
             }
         });
+        await this.botone()
+        return this.messange
+    }
+
+    async belicat() {
+        bot.sendMessage(this.chatId, 'ID Market',{
+            reply_markup: {
+                resize_keyboard: true,
+                keyboard: [['BACK']],
+            }
+        })
         await this.botone()
         return this.messange
     }
@@ -323,9 +447,27 @@ async function refrash(chatid) {
             }
         })
     } else {
-        bot.sendMessage(chatid, 'NFT Dalam proses pembayaran')
+        bot.sendMessage(chatid, 'NFT Dalam proses pembayaran',{
+            reply_markup: {
+                resize_keyboard: true,
+                keyboard: [[{ text: 'REFRASH'}], [{ text: 'STOP'}]],
+            }
+        })
     }
 
+}
+
+async function buycat(chatid) {
+     bot.sendMessage(chatid, 'Wait Mint Cat',{
+        reply_markup: {
+            resize_keyboard: true,
+            keyboard: [[{ text: 'CANCEL'}]],
+        }
+     })
+    const mint = await buy.startCat()
+    if (mint) {
+        bot.sendMessage(chatid, `STARTED`)   
+    }
 }
 
 bot.on('message', async (msg) => {
@@ -337,23 +479,26 @@ bot.on('message', async (msg) => {
     if (message == 'Beli') {
         methode.beli()
     }
+    if (message == 'CITIZEN') {
+        methode.belilevel1()
+    }
     if (message == 'ETH') {
-        async function beli() {
+        async function belieth() {
             buy.stopflag = false
             const price = await methode.priceuser('ETH')
             if (isNaN(price)) {
                 if (price == 'BACK') {
-                    methode.beli()
+                    methode.belilevel1()
                     return
                 } else {
                     bot.sendMessage(chatid, 'Harga harus angka')
-                    methode.beli()
+                    belieth()
                     return
                 }
             }
             const cookie = await methode.cookie()
             if (cookie == 'BACK') {
-                methode.beli()
+                methode.belilevel1()
                 return
             }
             buy.priceto = price
@@ -363,26 +508,26 @@ bot.on('message', async (msg) => {
             buy.address = '0x1e1af2aaf5EbBD5F57B47a187122A626FcE4eC16'
             return refrash(chatid)
         }
-        beli()
+        belieth()
         return
     }
     if (message == 'LN') {
-        async function beli() {
+        async function beliLN() {
             buy.stopflag = false
             const price = await methode.priceuser('LN')
             if (isNaN(price)) {
                 if (price == 'BACK') {
-                    methode.beli()
+                    methode.belilevel1()
                     return
                 } else {
                     bot.sendMessage(chatid, 'Harga harus angka')
-                    methode.beli()
+                    beliLN
                     return
                 }
             }
             const cookie = await methode.cookie()
             if (cookie == 'BACK') {
-                methode.beli()
+                methode.belilevel1()
                 return
             }
             buy.priceto = price
@@ -392,7 +537,7 @@ bot.on('message', async (msg) => {
             buy.address = 'link180sayalxm8rg9kgztef9guhh0d4annkj8m92nx'
             return refrash(chatid)
         }
-        beli()
+        beliLN()
         return
     }
     if (message == 'CANCEL') {
@@ -400,10 +545,9 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatid, 'CANCELED',{
             reply_markup: {
                 resize_keyboard: true,
-                keyboard: [[{ text: 'ETH' }], [{ text: 'LN' }]]
+                keyboard: [[{ text: 'CITIZEN' },{ text: 'CAT' }],[{ text: 'HOME'}]],
             }
         })
-        return
     }
     if (message == 'REFRASH') {
         buy.stop()
@@ -422,6 +566,31 @@ bot.on('message', async (msg) => {
     }
     if (message == 'HOME') {
         methode.home()
+    }
+    if (message == 'CAT') {
+        async function beliCat() {
+            buy.stopflag = false
+            const idmarket = await methode.belicat()
+            if (isNaN(idmarket)) {
+                if (idmarket == 'BACK') {
+                    methode.beli()
+                    return
+                } else {
+                    bot.sendMessage(chatid, 'ID Market harus angka')
+                    methode.beli()
+                    return
+                }
+            }
+            const cookie = await methode.cookie()
+            if (cookie == 'BACK') {
+                methode.beli()
+                return
+            }
+            buy.cookie = cookie
+            buy.id = idmarket
+            return buycat(chatid)
+        }
+        beliCat()
     }
 
 });
