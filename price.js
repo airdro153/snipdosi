@@ -412,6 +412,7 @@ bot.on('message', async (msg) => {
     }
     if (message == 'STOP') {
         buy.stop()
+        buy.stoped()
         bot.sendMessage(chatid, 'STOPED',{
             reply_markup: {
                 resize_keyboard: true,
