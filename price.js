@@ -542,6 +542,7 @@ bot.on('message', async (msg) => {
     }
     if (message == 'CANCEL') {
         buy.stoped()
+        buy.stop()
         bot.sendMessage(chatid, 'CANCELED',{
             reply_markup: {
                 resize_keyboard: true,
